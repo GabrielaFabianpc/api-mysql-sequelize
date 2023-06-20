@@ -12,5 +12,3 @@ app.listen(port, () => {
 });
 
 module.exports = app;
-
-//ARRUMAR O GITIGNORE;
