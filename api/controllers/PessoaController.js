@@ -64,5 +64,67 @@ class PessoaController {
       res.status(500).send({ message: "Pessoa não atualizada!" });
     }
   }
+
+  static async listarPessoasPorMatricula(req, res) {
+    const { estudanteId, matriculaId } = req.params;
+    try {
+      const pessoasPorMatricula = await database.Matriculas.findOne({
+        where: { id: Number(matriculaId), estudante_id: Number(estudanteId) },
+      });
+      res.status(200).json(pessoasPorMatricula);
+    } catch (error) {
+      res
+        .status(500)
+        .send({ message: "Não foi possivel listar matricula por ID!" });
+    }
+  }
+  static async cadastrarMatricula(req, res) {
+    const { estudanteId } = req.params;
+    const novaMatricula = { ...req.body, estudante_id: Number(estudanteId) };
+    try {
+      const matriculaCadastrada = await database.Matriculas.create(
+        novaMatricula
+      );
+      res.status(200).json({
+        message: "Pessoa cadastrada com sucesso",
+        matriculaCadastrada,
+      });
+    } catch (error) {
+      res.status(500).send({ message: "Matricula não cadastrada no sistema!" });
+    }
+  }
+  static async atualizarMatricula(req, res) {
+    const { estudanteId, matriculaId } = req.params;
+    const matriculaBody = req.body;
+    try {
+      await database.Matriculas.update(matriculaBody, {
+        where: {
+          id: Number(matriculaId),
+          estudante_id: Number(estudanteId),
+        },
+      });
+      const matriculaAtualizada = await database.Matriculas.findOne({
+        where: { id: Number(matriculaId) },
+      });
+      res.status(200).json(matriculaAtualizada);
+    } catch (error) {
+      res.status(500).send({ message: "Matricula não atualizada!" });
+    }
+  }
+  static async deletarMatricula(req, res) {
+    try {
+      const { estudanteId, matriculaId } = req.params;
+      const matriculaDeletada = await database.Matriculas.destroy({
+        where: { id: Number(matriculaId) },
+      });
+      res
+        .status(200)
+        .send({ message: `Matricula ${matriculaId} deletada com sucesso!` });
+    } catch (error) {
+      res
+        .status(500)
+        .send({ message: "Erro ao deletar matricula do sistema!" });
+    }
+  }
 }
 module.exports = PessoaController;
