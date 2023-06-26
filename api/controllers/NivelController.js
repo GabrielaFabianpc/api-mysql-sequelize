@@ -58,6 +58,15 @@ class NivelController {
       res.status(500).send({ message: "Não foi possível deletar nível!" });
     }
   }
+  static async restauraNivel(req, res) {
+    const { id } = req.params;
+    try {
+      await database.Niveis.restore({ where: { id } });
+      res.status(200).json({ message: `Id ${id} restaurado!` });
+    } catch (error) {
+      res.status(500).send({ message: "Não foi possível restaurar nível!" });
+    }
+  }
 }
 
 module.exports = NivelController;

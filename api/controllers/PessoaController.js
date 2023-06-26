@@ -4,6 +4,7 @@ class PessoaController {
   static async pegaTodasAsPessoas(req, res) {
     try {
       const todasAsPessoas = await database.Pessoas.findAll(); //não é o nome do arquivo é oq esta retornando
+
       res.status(200).json(todasAsPessoas);
     } catch (error) {
       res.status(500).send({ message: "Error ao listas pessoas!" });
@@ -64,7 +65,17 @@ class PessoaController {
       res.status(500).send({ message: "Pessoa não atualizada!" });
     }
   }
-
+  static async restauraPessoa(req, res) {
+    const { id } = req.params;
+    try {
+      await database.Pessoas.restore({ where: { id } });
+      res.status(200).json({ message: `Id ${id} restaurado!` });
+    } catch (error) {
+      res
+        .status(500)
+        .send({ message: "Não foi possível listar pessoas deletadas!" });
+    }
+  }
   static async listarPessoasPorMatricula(req, res) {
     const { estudanteId, matriculaId } = req.params;
     try {
@@ -124,6 +135,22 @@ class PessoaController {
       res
         .status(500)
         .send({ message: "Erro ao deletar matricula do sistema!" });
+    }
+  }
+  static async restauraMatricula(req, res) {
+    const { estudanteId, matriculaId } = req.params;
+    try {
+      await database.Matriculas.restore({
+        where: {
+          id: Number(matriculaId),
+          estudante_id: Number(estudanteId),
+        },
+      });
+      res.status(200).json({ message: `Id ${id} restaurado` });
+    } catch (error) {
+      res
+        .status(500)
+        .send({ message: "Não foi possível restaurar matrícula!" });
     }
   }
 }

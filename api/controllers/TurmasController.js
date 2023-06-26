@@ -65,5 +65,14 @@ class TurmasController {
       res.status(500).send({ message: "Não foi possível deletar turma!" });
     }
   }
+  static async restauraTurma(req, res) {
+    const { id } = req.params;
+    try {
+      await database.Turmas.restore({ where: { id } });
+      res.status(200).json({ message: `Id ${id} restaurado!` });
+    } catch (error) {
+      res.status(500).send({ message: "Não foi possível restaurar turma!" });
+    }
+  }
 }
 module.exports = TurmasController;

@@ -7,4 +7,5 @@ router.get("/niveis/:id", NivelController.listarNiveisPorID);
 router.post("/niveis", NivelController.cadastrarNiveis);
 router.put("/niveis/:id", NivelController.atualizarNivel);
 router.delete("/niveis/:id", NivelController.deletarNivel);
+router.post("/niveis/:id/restaura", NivelController.restauraNivel);
 module.exports = router;
